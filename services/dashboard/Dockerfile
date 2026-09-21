@@ -5,10 +5,12 @@ COPY go.mod .
 RUN go mod download
 COPY . . 
 RUN go build -o server .
-EXPOSE 8081
-CMD []
+
 
 
 # Stage Two: Production Stage
 FROM golang:1.22 
 WORKDIR /app
+COPY --from=build /app/server .
+EXPOSE 8081
+CMD ["./server"]
